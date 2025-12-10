@@ -1,63 +1,162 @@
-# Predictive Plant Care 🌱
+# 🌱 Predictive Plant Care System (IoT + AI)
 
-Predictive Plant Care is an AI-powered system designed to monitor and predict the health of your plants. Using environmental data and historical plant information, it provides personalized care recommendations to ensure your plants thrive.
+An intelligent IoT and AI-powered system that monitors plant health in real time and predicts optimal watering needs while detecting plant diseases using computer vision. Designed for smart homes, gardens, farmers, and SMEs.
 
-## Features
+---
 
-- Predicts plant health based on environmental conditions (light, temperature, soil moisture, humidity)
-- Suggests optimal watering, fertilization, and sunlight requirements
-- Tracks plant growth and provides alerts for potential issues
-- Easy-to-use interface for monitoring multiple plants
+## 🚀 Key Features
 
-## Tech Stack
+- Real-time monitoring of:
+  - Soil moisture
+  - Temperature
+  - Humidity
+  - Light intensity
+- AI-based water requirement prediction
+- Image-based plant disease detection
+- Cloud-based data storage & analytics
+- Live web dashboard for visualization
+- Scalable architecture for future automation
+- Phase-2 ready for smart irrigation automation
 
-- Python
-- Machine Learning (Scikit-learn, TensorFlow/PyTorch optional)
-- IoT sensors (optional: soil moisture, light, temperature sensors)
-- Data storage: CSV / SQLite / MySQL
-- Visualization: Matplotlib / Seaborn / Plotly
+---
 
-## Installation
-1.Clone the repo:
-    ```bash
-      
-    git clone https://github.com/<shivam-shukla11>/Predictive-Plant-Care.git
+## 🧠 How It Works
 
-2.Navigate to the project folder:
-    ```bash
-    
-    cd Predictive-Plant-Care
-3.Create a virtual environment:
-    ```bash 
+1. Sensors collect real-time environmental data.
+2. ESP32 sends data to the FastAPI backend via WiFi.
+3. Data is stored securely in MongoDB Atlas.
+4. AI models analyze the data to:
+   - Predict watering needs  
+   - Detect plant diseases from images  
+5. Results are displayed on a live dashboard.
+6. (Phase 2) Smart automation using pump & relay.
 
-    python -m venv venv
-4.Activate the virtual environment:
-    ```bash
+---
 
-    # Windows
+## 🧰 Tech Stack
+
+### 🔧 Hardware & IoT
+- ESP32 / ESP8266 – WiFi-enabled microcontroller  
+- Capacitive Soil Moisture Sensor  
+- DHT11 / DHT22 – Temperature & Humidity  
+- LDR – Light sensor  
+- OLED Display (Optional – Prototype only)  
+- Power supply / Battery module  
+
+---
+
+### 🧠 Artificial Intelligence & Machine Learning
+- **Scikit-learn** – Water prediction  
+  - Model: `RandomForestRegressor`
+- **TensorFlow / Keras** – Disease detection  
+  - Model: `MobileNetV2` / `EfficientNet` (Pretrained)
+- **OpenCV** – Image processing  
+- **Pillow (PIL)** – Image handling  
+
+---
+
+### ⚙️ Backend
+- **Python**
+- **FastAPI**
+- **Uvicorn**
+
+---
+
+### 🗄️ Database
+- **MongoDB Atlas (Cloud Database)**
+
+---
+
+### ☁️ Cloud & Deployment
+- **Render** – Backend hosting  
+- **MongoDB Atlas** – Database hosting  
+- **GitHub** – Version control  
+
+---
+
+### 📊 Frontend / Dashboard
+- HTML, CSS, JavaScript  
+- Chart.js / Recharts for graphs  
+- REST API-based data flow  
+
+---
+
+### 📡 Communication
+- REST API  
+- JSON format  
+- WiFi-based communication from ESP32  
+
+---
+
+## 🔍 Phase-Wise Development
+
+### ✅ Phase 1 – Prototype
+- Sensor monitoring
+- Cloud database
+- Water prediction
+- Disease detection
+- Web dashboard
+
+### 🔮 Phase 2 – Smart Automation
+- Mobile app
+- Multi-user login
+- Alerts & notifications
+- Automated irrigation
+- Farmer & SME analytics
+
+---
+
+## ⚙️ Installation & Setup
+
+1. Clone the repo:
+```bash
+git clone https://github.com/<shivam-shukla11>/Predictive-Plant-Care.git
+```
+2. Navigate to the project folder:<br>
+ ```bash
+cd Predictive-Plant-Care
+```
+3. Create a virtual environment:
+```bash 
+python -m venv venv
+```
+4. Activate the virtual environment:
+```bash
+   # Windows
     venv\Scripts\activate
-    # Linux/Mac 
+   # Linux/Mac 
     source venv/bin/activate
+```
+5. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+6. Run Backend:
+```bash
+uvicorn main:app --reload
+```
+Backend will run on:
+```bash
+http://127.0.0.1:8000
+```
+## 📌 Use Cases
 
-5.Install dependencies:
-    ```bash
+- Smart home plant care
+- Nursery & gardening automation
+- Farmers & agri-SMEs
+- Greenhouse monitoring
+- Educational IoT + AI demos
 
-    pip install -r requirements.txt
 
-## Usage
+# 👥Team
+  Built By:
 
-- 1.Collect plant data (soil moisture, light, temperature, humidity, etc.).
-- 2.Run the predictive model:
-    ```bash
-
-    python main.py
-- 3.Check predictions and follow care recommendations.
-
-## Built By
-
-- [Shivam Shukla](https://github.com/shivam-shukla11)    
-- [Mihir Parmar](https://github.com/mihirparmar31)
-- [Dhruv Joshi](https://github.com/burfi-jalabi) 
+- [Shivam Shukla](https://github.com/shivam-shukla11) - Backend & AI   
+- [Mihir Parmar](https://github.com/mihirparmar31) - Hardware & IoT  
+- [Dhruv Joshi](https://github.com/burfi-jalabi) - Frontend & Dashboard
 
 ## Contribution
 - Contributions are welcome! Please fork the repo, make changes, and submit a pull request.
+
+## 📜 License
+- This project is for educational, research, and prototyping purposes.
