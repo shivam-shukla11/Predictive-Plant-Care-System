@@ -56,7 +56,7 @@ Predictive Plant Care is an AI-powered system designed to monitor and predict th
 ## Built By
 
 - [Shivam Shukla](https://github.com/shivam-shukla11)    
-- [Mihir Parmar](https://github.com/MihirUsername)
+- [Mihir Parmar](https://github.com/mihirparmar31)
 - [Dhruv Joshi](https://github.com/burfi-jalabi) 
 
 ## Contribution
