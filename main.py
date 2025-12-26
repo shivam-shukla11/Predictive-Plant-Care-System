@@ -1,6 +1,8 @@
 # main.py
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from routes.insights import router as insights_router
+from routes.auth import router as auth_router
+from dotenv import load_dotenv 
 from pydantic import BaseModel, Field
 from datetime import datetime
 from contextlib import asynccontextmanager
@@ -46,7 +48,7 @@ app = FastAPI(
     lifespan=lifespan
 )
 app.include_router(insights_router, prefix="/api")
-
+app.include_router(auth_router)
 # ----------------------
 # Health check
 # ----------------------

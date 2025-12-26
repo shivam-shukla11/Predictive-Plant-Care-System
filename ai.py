@@ -11,8 +11,8 @@ from tensorflow.keras.utils import load_img, img_to_array
 # ----------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-MODEL_PATH = os.path.join(BASE_DIR, "models", "plant_disease_detection.h5")
-CATEGORIES_PATH = os.path.join(BASE_DIR, "models", "categories.json")
+MODEL_PATH = os.path.join(BASE_DIR, "ai_models", "plant_disease_detection.h5")
+CATEGORIES_PATH = os.path.join(BASE_DIR, "ai_models", "categories.json")
 
 if not os.path.exists(MODEL_PATH):
     raise FileNotFoundError("Disease model file not found")

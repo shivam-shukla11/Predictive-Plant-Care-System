@@ -1,30 +1,40 @@
 # routes/insights.py
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+
 from db import sensor_collection
+from logic.core.deps import get_current_user
 from logic.insights import generate_plant_insights
 from logic.weather.client import fetch_weather
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/plant-insights",
+    tags=["Plant Insights"]
+)
 
 
-@router.get("/plant-insights/latest")
-def get_latest_plant_insights():
+@router.get("/latest")
+def get_latest_plant_insights(
+    user: dict = Depends(get_current_user)  # 🔐 AUTH ENFORCED
+):
     """
     Fully autonomous plant intelligence endpoint.
-    Backend decides everything.
+    Requires valid JWT access token.
     """
 
-    # 1️⃣ Latest sensor data
+    # 1️⃣ Fetch latest sensor data
     latest = sensor_collection.find_one(
         sort=[("timestamp", -1)],
         projection={"_id": 0}
     )
 
     if not latest:
-        raise HTTPException(status_code=404, detail="No sensor data found")
+        raise HTTPException(
+            status_code=404,
+            detail="No sensor data found"
+        )
 
-    # 2️⃣ History (for trends + watering)
+    # 2️⃣ Fetch history (last 24 records)
     history_cursor = sensor_collection.find(
         {},
         projection={
@@ -39,7 +49,7 @@ def get_latest_plant_insights():
 
     history = list(history_cursor)
 
-    # 3️⃣ Weather (optional, safe)
+    # 3️⃣ Fetch weather (optional)
     weather = None
     if latest.get("lat") is not None and latest.get("lon") is not None:
         weather = fetch_weather(
@@ -47,7 +57,7 @@ def get_latest_plant_insights():
             lon=latest["lon"]
         )
 
-    # 4️⃣ Intelligence
+    # 4️⃣ Generate intelligence
     insights = generate_plant_insights(
         sensor_data=latest,
         history=history,
@@ -56,6 +66,10 @@ def get_latest_plant_insights():
 
     # 5️⃣ Final response
     return {
+        "user": {
+            "id": user["id"],
+            "email": user["email"]
+        },
         "timestamp": latest.get("timestamp"),
         "sensor_data": latest,
         "weather": weather,

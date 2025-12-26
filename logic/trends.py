@@ -1,16 +1,37 @@
 # logic/trends.py
+
 from datetime import datetime, timedelta
 from db import sensor_collection
 
+
+# -----------------------------------
+# Helper: normalize Mongo result
+# -----------------------------------
+def _round(value):
+    return round(value, 2) if value is not None else None
+
+
+# -----------------------------------
+# Last 24 hours (hourly averages)
+# -----------------------------------
 def get_last_24h_trends():
     since = datetime.utcnow() - timedelta(hours=24)
 
     pipeline = [
-        {"$match": {"timestamp": {"$gte": since}}},
+        {
+            "$match": {
+                "timestamp": {"$gte": since}
+            }
+        },
         {
             "$group": {
                 "_id": {
-                    "hour": {"$hour": "$timestamp"}
+                    "hour": {
+                        "$dateToString": {
+                            "format": "%H:00",
+                            "date": "$timestamp"
+                        }
+                    }
                 },
                 "temperature": {"$avg": "$temperature"},
                 "humidity": {"$avg": "$humidity"},
@@ -24,23 +45,35 @@ def get_last_24h_trends():
     data = list(sensor_collection.aggregate(pipeline))
 
     return {
-        "labels": [f"{d['_id']['hour']}:00" for d in data],
-        "temperature": [round(d["temperature"], 2) for d in data],
-        "humidity": [round(d["humidity"], 2) for d in data],
-        "soilMoisture": [round(d["soilMoisture"], 2) for d in data],
-        "light": [round(d["light"], 2) for d in data],
+        "labels": [d["_id"]["hour"] for d in data],
+        "temperature": [_round(d["temperature"]) for d in data],
+        "humidity": [_round(d["humidity"]) for d in data],
+        "soilMoisture": [_round(d["soilMoisture"]) for d in data],
+        "light": [_round(d["light"]) for d in data],
     }
 
 
+# -----------------------------------
+# Last 7 days (daily averages)
+# -----------------------------------
 def get_last_7d_trends():
     since = datetime.utcnow() - timedelta(days=7)
 
     pipeline = [
-        {"$match": {"timestamp": {"$gte": since}}},
+        {
+            "$match": {
+                "timestamp": {"$gte": since}
+            }
+        },
         {
             "$group": {
                 "_id": {
-                    "day": {"$dayOfMonth": "$timestamp"}
+                    "day": {
+                        "$dateToString": {
+                            "format": "%Y-%m-%d",
+                            "date": "$timestamp"
+                        }
+                    }
                 },
                 "temperature": {"$avg": "$temperature"},
                 "humidity": {"$avg": "$humidity"},
@@ -54,9 +87,9 @@ def get_last_7d_trends():
     data = list(sensor_collection.aggregate(pipeline))
 
     return {
-        "labels": [f"Day {d['_id']['day']}" for d in data],
-        "temperature": [round(d["temperature"], 2) for d in data],
-        "humidity": [round(d["humidity"], 2) for d in data],
-        "soilMoisture": [round(d["soilMoisture"], 2) for d in data],
-        "light": [round(d["light"], 2) for d in data],
+        "labels": [d["_id"]["day"] for d in data],
+        "temperature": [_round(d["temperature"]) for d in data],
+        "humidity": [_round(d["humidity"]) for d in data],
+        "soilMoisture": [_round(d["soilMoisture"]) for d in data],
+        "light": [_round(d["light"]) for d in data],
     }
